@@ -32,10 +32,41 @@ async function compressImage(file, maxWidth = 600, quality = 0.7) {
     });
 }
 
+async function uploadWithRetry(formData, url, maxRetries = 2) {
+    let attempt = 0;
+    while (attempt <= maxRetries) {
+        try {
+            if (attempt > 0) {
+                document.getElementById('results').textContent = `Retry attempt ${attempt}: Processing...`;
+            } else {
+                document.getElementById('results').textContent = "Processing...";
+            }
+
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                return await response.json();
+            } else {
+                throw new Error(`Server Error: ${response.statusText}`);
+            }
+        } catch (error) {
+            if (attempt === maxRetries) {
+                throw error; // throw after max retries
+            }
+            attempt++;
+            console.log(`Retrying... attempt ${attempt}`);
+            await new Promise(res => setTimeout(res, 1000)); // wait 1 sec before retry
+        }
+    }
+}
+
 document.getElementById('image-form').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    document.getElementById('results').textContent = "Processing...";
+    document.getElementById('results').textContent = "Preparing...";
     document.getElementById('original-size').textContent = "";
     document.getElementById('compressed-size').textContent = "";
     document.getElementById('preview').src = "";
@@ -47,15 +78,12 @@ document.getElementById('image-form').addEventListener('submit', async function 
     let selectedFile = fileInput.files[0] || photoInput.files[0];
 
     if (selectedFile) {
-        // Show original file size
         document.getElementById('original-size').textContent = `Original Size: ${(selectedFile.size / 1024).toFixed(2)} KB`;
 
         const { compressedFile, compressedBlob } = await compressImage(selectedFile);
 
-        // Show compressed file size
         document.getElementById('compressed-size').textContent = `Compressed Size: ${(compressedBlob.size / 1024).toFixed(2)} KB`;
 
-        // Show preview
         const previewURL = URL.createObjectURL(compressedBlob);
         document.getElementById('preview').src = previewURL;
 
@@ -66,18 +94,9 @@ document.getElementById('image-form').addEventListener('submit', async function 
     }
 
     try {
-        const response = await fetch('https://photo-task-backend.onrender.com/detect', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            document.getElementById('results').textContent = JSON.stringify(data, null, 2);
-        } else {
-            document.getElementById('results').textContent = "Error: " + response.statusText;
-        }
+        const data = await uploadWithRetry(formData, 'https://photo-task-backend.onrender.com/detect');
+        document.getElementById('results').textContent = JSON.stringify(data, null, 2);
     } catch (error) {
-        document.getElementById('results').textContent = "Error: " + error.message;
+        document.getElementById('results').textContent = "Error after retries: " + error.message;
     }
 });
