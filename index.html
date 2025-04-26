@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Take Photo or Upload Image</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <h1>Upload or Take a Photo to Detect Objects</h1>
@@ -12,7 +13,7 @@
     <form id="image-form" enctype="multipart/form-data">
         <!-- Option to upload an image -->
         <label for="image-file">Upload Image</label>
-        <input type="file" id="image-file" name="file" accept="image/*" required>
+        <input type="file" id="image-file" name="file" accept="image/*">
 
         <br><br>
 
@@ -29,36 +30,6 @@
     <h2>Detection Results:</h2>
     <pre id="results"></pre>
 
-    <script>
-        document.getElementById('image-form').addEventListener('submit', async function (event) {
-            event.preventDefault();  // Prevent form submission
-
-            const formData = new FormData();
-            const fileInput = document.getElementById('image-file');
-            const photoInput = document.getElementById('take-photo');
-            
-            // If a file was uploaded
-            if (fileInput.files[0]) {
-                formData.append("file", fileInput.files[0]);
-            }
-            // If a photo was taken
-            else if (photoInput.files[0]) {
-                formData.append("file", photoInput.files[0]);
-            }
-
-            // Send image to FastAPI backend
-            const response = await fetch('https://photo-task-backend.onrender.com/detect', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                document.getElementById('results').textContent = JSON.stringify(data, null, 2);
-            } else {
-                alert("Error: " + response.statusText);
-            }
-        });
-    </script>
+    <script src="js/script.js"></script>
 </body>
 </html>
