@@ -1,36 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Take Photo or Upload Image</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
     <h1>Upload or Take a Photo to Detect Objects</h1>
 
+    <!-- Image upload form -->
     <form id="image-form" enctype="multipart/form-data">
-        <label for="image-file">Upload Image</label>
-        <input type="file" id="image-file" name="file" accept="image/*">
+      <!-- Option to upload an image -->
+      <label for="image-file">Upload Image</label>
+      <input type="file" id="image-file" name="file" accept="image/*" />
 
-        <br><br>
+      <br /><br />
 
-        <label for="take-photo">Take Photo</label>
-        <input type="file" id="take-photo" name="photo" accept="image/*" capture="camera">
+      <!-- Option to take a photo using the camera -->
+      <label for="take-photo">Take Photo</label>
+      <input
+        type="file"
+        id="take-photo"
+        name="photo"
+        accept="image/*"
+        capture="camera"
+      />
 
-        <br><br>
+      <br /><br />
 
-        <button type="submit">Upload Image or Take Photo</button>
+      <button type="submit">Upload Image or Take Photo</button>
     </form>
 
+    <!-- Loading spinner -->
     <div id="spinner"></div>
-    <h3 id="message"></h3>
 
-    <img id="preview" alt="Preview will appear here" />
+    <p>Time Elapsed: <span id="elapsed-time">0</span> seconds</p>
+    <p id="message"></p>
 
+    <!-- Display original and compressed size -->
+    <p id="original-size"></p>
+    <p id="compressed-size"></p>
+
+    <!-- Display image preview -->
+    <div>
+      <img
+        id="preview"
+        alt="Image Preview"
+        style="max-width: 100%; display: none"
+      />
+    </div>
+
+    <!-- Display results -->
     <h2>Detection Results:</h2>
     <pre id="results"></pre>
 
     <script src="js/script.js"></script>
-</body>
+  </body>
 </html>
