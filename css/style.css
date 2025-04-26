@@ -1,72 +1,29 @@
-/* Reset some default styles */
-body, h1, h2, label, button {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-/* Body styling */
 body {
+    font-family: Arial, sans-serif;
+    text-align: center;
     padding: 20px;
-    background-color: #f9f9f9;
 }
 
-/* Heading styles */
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
+#spinner {
+    display: none;
+    margin: 20px auto;
+    width: 50px;
+    height: 50px;
+    border: 5px solid lightgray;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-h2 {
-    margin-top: 30px;
-    font-size: 20px;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-/* Form styles */
-form {
-    margin-bottom: 20px;
-}
-
-label {
-    font-size: 18px;
-}
-
-input[type="file"] {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-/* Button styling */
-button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Image preview styling */
-#image-preview {
-    width: 100%;        
-    max-width: 800px;   /* Limit the width to a max of 800px */
-    height: auto;
-    margin-top: 20px;
-    border-radius: 8px;
+img#preview {
+    width: 80%;
+    max-width: 400px;
+    margin: 20px auto;
     display: block;
-    border: 2px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Result display area */
-#results {
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-    font-family: monospace;
+    border: 1px solid #ccc;
 }
