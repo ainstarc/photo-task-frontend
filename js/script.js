@@ -1,44 +1,70 @@
+async function compressImage(file, maxWidth = 600, quality = 0.7) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const scaleSize = maxWidth / img.width;
+                canvas.width = maxWidth;
+                canvas.height = img.height * scaleSize;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(
+                    (blob) => {
+                        const compressedFile = new File([blob], file.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        resolve({ compressedFile, compressedBlob: blob });
+                    },
+                    'image/jpeg',
+                    quality
+                );
+            };
+        };
+    });
+}
+
 document.getElementById('image-form').addEventListener('submit', async function (event) {
-    event.preventDefault();  // Prevent form submission
+    event.preventDefault();
+
+    document.getElementById('results').textContent = "Processing...";
+    document.getElementById('original-size').textContent = "";
+    document.getElementById('compressed-size').textContent = "";
+    document.getElementById('preview').src = "";
 
     const formData = new FormData();
     const fileInput = document.getElementById('image-file');
     const photoInput = document.getElementById('take-photo');
-    
-    // Image preview element
-    const imagePreview = document.getElementById('image-preview');
-    
-    // Show loading spinner
-    imagePreview.style.display = "none";
-    const results = document.getElementById('results');
-    results.textContent = "Loading...";
 
-    // If a file was uploaded
-    if (fileInput.files[0]) {
-        formData.append("file", fileInput.files[0]);
+    let selectedFile = fileInput.files[0] || photoInput.files[0];
 
-        // Display image preview
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            imagePreview.src = e.target.result;
-            imagePreview.style.display = "block";
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-    } 
-    // If a photo was taken
-    else if (photoInput.files[0]) {
-        formData.append("file", photoInput.files[0]);
+    if (selectedFile) {
+        // Show original file size
+        document.getElementById('original-size').textContent = `Original Size: ${(selectedFile.size / 1024).toFixed(2)} KB`;
 
-        // Display image preview
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            imagePreview.src = e.target.result;
-            imagePreview.style.display = "block";
-        };
-        reader.readAsDataURL(photoInput.files[0]);
+        const { compressedFile, compressedBlob } = await compressImage(selectedFile);
+
+        // Show compressed file size
+        document.getElementById('compressed-size').textContent = `Compressed Size: ${(compressedBlob.size / 1024).toFixed(2)} KB`;
+
+        // Show preview
+        const previewURL = URL.createObjectURL(compressedBlob);
+        document.getElementById('preview').src = previewURL;
+
+        formData.append("file", compressedFile);
+    } else {
+        alert("Please select or take a photo.");
+        return;
     }
 
-    // Send image to backend for detection
     try {
         const response = await fetch('https://photo-task-backend.onrender.com/detect', {
             method: 'POST',
@@ -47,11 +73,11 @@ document.getElementById('image-form').addEventListener('submit', async function 
 
         if (response.ok) {
             const data = await response.json();
-            results.textContent = JSON.stringify(data, null, 2);
+            document.getElementById('results').textContent = JSON.stringify(data, null, 2);
         } else {
-            results.textContent = `Error: ${response.statusText}`;
+            document.getElementById('results').textContent = "Error: " + response.statusText;
         }
     } catch (error) {
-        results.textContent = `Error: ${error.message}`;
+        document.getElementById('results').textContent = "Error: " + error.message;
     }
 });

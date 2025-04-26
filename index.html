@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Take Photo or Upload Image</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
     <h1>Upload or Take a Photo to Detect Objects</h1>
 
     <!-- Image upload form -->
     <form id="image-form" enctype="multipart/form-data">
-        <!-- Option to upload an image -->
-        <label for="image-file">Upload Image</label>
-        <input type="file" id="image-file" name="file" accept="image/*">
+      <!-- Option to upload an image -->
+      <label for="image-file">Upload Image</label>
+      <input type="file" id="image-file" name="file" accept="image/*" />
 
-        <br><br>
+      <br /><br />
 
-        <!-- Option to take a photo using the camera -->
-        <label for="take-photo">Take Photo</label>
-        <input type="file" id="take-photo" name="photo" accept="image/*" capture="camera">
+      <!-- Option to take a photo using the camera -->
+      <label for="take-photo">Take Photo</label>
+      <input
+        type="file"
+        id="take-photo"
+        name="photo"
+        accept="image/*"
+        capture="camera"
+      />
 
-        <br><br>
+      <br /><br />
 
-        <button type="submit">Upload Image or Take Photo</button>
+      <button type="submit">Upload Image or Take Photo</button>
     </form>
 
     <!-- Display the image preview -->
+    <h2>Image Info:</h2>
+    <p id="original-size"></p>
+    <p id="compressed-size"></p>
     <h2>Image Preview:</h2>
-    <img id="image-preview" src="" alt="Image Preview" style="display: none;">
+    <img id="preview" style="max-width: 100%; height: auto; margin-top: 10px" />
+
+    <img id="image-preview" src="" alt="Image Preview" style="display: none" />
 
     <!-- Display results -->
     <h2>Detection Results:</h2>
     <pre id="results"></pre>
 
     <script src="js/script.js"></script>
-</body>
+  </body>
 </html>
