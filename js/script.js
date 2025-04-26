@@ -5,19 +5,41 @@ document.getElementById('image-form').addEventListener('submit', async function 
     const fileInput = document.getElementById('image-file');
     const photoInput = document.getElementById('take-photo');
     
-    // Check if a file was uploaded through the "Upload Image" option
+    // Image preview element
+    const imagePreview = document.getElementById('image-preview');
+    
+    // Show loading spinner
+    imagePreview.style.display = "none";
+    const results = document.getElementById('results');
+    results.textContent = "Loading...";
+
+    // If a file was uploaded
     if (fileInput.files[0]) {
         formData.append("file", fileInput.files[0]);
-    }
 
-    // Check if a photo was taken through the "Take Photo" option
+        // Display image preview
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = "block";
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } 
+    // If a photo was taken
     else if (photoInput.files[0]) {
-        formData.append("file", photoInput.files[0]);  // Attach the taken photo to the form data
+        formData.append("file", photoInput.files[0]);
+
+        // Display image preview
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = "block";
+        };
+        reader.readAsDataURL(photoInput.files[0]);
     }
 
-    // Make sure we have a file to upload
-    if (formData.has('file')) {
-        // Send image to FastAPI backend
+    // Send image to backend for detection
+    try {
         const response = await fetch('https://photo-task-backend.onrender.com/detect', {
             method: 'POST',
             body: formData
@@ -25,11 +47,11 @@ document.getElementById('image-form').addEventListener('submit', async function 
 
         if (response.ok) {
             const data = await response.json();
-            document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+            results.textContent = JSON.stringify(data, null, 2);
         } else {
-            alert("Error: " + response.statusText);
+            results.textContent = `Error: ${response.statusText}`;
         }
-    } else {
-        alert("Please select or take a photo to upload.");
+    } catch (error) {
+        results.textContent = `Error: ${error.message}`;
     }
 });
