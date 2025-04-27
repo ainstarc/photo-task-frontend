@@ -57,3 +57,10 @@
   border: 1px solid #ddd;
   border-radius: 4px;
 }
+
+p.info {
+  margin: 0;
+  padding: 5px; /* Unified padding */
+  background-color: #f9f9f9; /* Optional: Light gray background for better visibility */
+  color: #333; /* Text color for better contrast */
+}

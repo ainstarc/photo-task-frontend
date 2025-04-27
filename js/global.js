@@ -43,9 +43,7 @@ form.addEventListener("submit", async (event) => {
   ).toFixed(2)} KB`;
 
   // Show loading spinner
-  startTime = new Date(); // Start time now
-  elapsedInterval = setInterval(updateElapsedTime, 1000); // Update every 1 second
-
+  startElapsedTime(); // Start the timer
   spinner.style.display = "block";
   message.textContent = "Uploading and processing...";
   resultsDiv.textContent = "";
@@ -73,7 +71,7 @@ form.addEventListener("submit", async (event) => {
       });
 
       if (response.ok) {
-        clearInterval(elapsedInterval); // Stop updating time
+        stopElapsedTime(); // Stop the timer when the result is out
         const data = await response.json();
         displayResults(data);
         message.textContent = "Detection complete!";
@@ -88,10 +86,10 @@ form.addEventListener("submit", async (event) => {
         message.textContent = `Server not ready (Attempt ${attempts}/${maxAttempts}). Retrying in 5 seconds...`;
         await new Promise((resolve) => setTimeout(resolve, retryDelay)); // Wait 5s
       } else {
+        stopElapsedTime(); // Stop the timer if retries are exhausted
         message.textContent =
           "Failed after multiple retries. Please try again later.";
         spinner.style.display = "none";
-        clearInterval(elapsedInterval); // Stop updating time
         return;
       }
     }
