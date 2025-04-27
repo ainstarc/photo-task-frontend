@@ -32,7 +32,12 @@ form.addEventListener("submit", async (event) => {
   ).toFixed(2)} KB`;
 
   // Compress the image
-  selectedFile = await compressImage(selectedFile, 800, 800, 0.7);
+  try {
+    selectedFile = await compressImage(selectedFile, 800, 800, 0.7);
+  } catch (error) {
+    alert("Image compression failed. Please try again.");
+    return;
+  }
   document.getElementById("compressed-size").textContent = `Compressed size: ${(
     selectedFile.size / 1024
   ).toFixed(2)} KB`;
@@ -59,13 +64,13 @@ form.addEventListener("submit", async (event) => {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const response = await fetch(
-        "https://photo-task-backend.onrender.com/detect",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      // Uncomment the line below for production
+      // let url = "http://127.0.0.1:8000/detect"; // Localhost URL for testing
+      let url = "https://photo-task-backend.onrender.com/detect"; // Production URL
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         clearInterval(elapsedInterval); // Stop updating time
@@ -128,7 +133,12 @@ function displayResults(data) {
 }
 
 // Compress image to a smaller size
-function compressImage(file, maxWidth = 800, maxHeight = 800, quality = 0.7) {
+export function compressImage(
+  file,
+  maxWidth = 800,
+  maxHeight = 800,
+  quality = 0.7
+) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -136,7 +146,6 @@ function compressImage(file, maxWidth = 800, maxHeight = 800, quality = 0.7) {
       const img = new Image();
 
       img.onload = () => {
-        // Calculate the new dimensions to maintain the aspect ratio
         let width = img.width;
         let height = img.height;
 
@@ -146,17 +155,14 @@ function compressImage(file, maxWidth = 800, maxHeight = 800, quality = 0.7) {
           height = height * ratio;
         }
 
-        // Create a canvas to draw the resized image
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
         canvas.width = width;
         canvas.height = height;
 
-        // Draw the image on the canvas
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Compress the image and get the compressed Blob
         canvas.toBlob(
           (blob) => {
             resolve(blob);
@@ -175,8 +181,20 @@ function compressImage(file, maxWidth = 800, maxHeight = 800, quality = 0.7) {
   });
 }
 
+// Update elapsed time
 let startTime = null;
 let elapsedInterval = null;
+
+export function startElapsedTime() {
+  startTime = new Date();
+  elapsedInterval = setInterval(updateElapsedTime, 1000);
+}
+
+export function stopElapsedTime() {
+  clearInterval(elapsedInterval);
+  elapsedInterval = null;
+  startTime = null;
+}
 
 function updateElapsedTime() {
   if (startTime !== null) {

@@ -1,0 +1,160 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-top: 20px;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  margin: 20px auto;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+li {
+  background-color: #fff;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Task item container */
+.task-item {
+  display: flex; /* Use flexbox to align items in one line */
+  align-items: center; /* Vertically center the items */
+  justify-content: space-between; /* Space out the elements */
+  padding: 5px; /* Add padding for spacing */
+  border: 2px solid #ddd; /* Add a border around the entire task item */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  margin-bottom: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for better visibility */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
+}
+
+.task-item:hover {
+  transform: scale(1.02); /* Slightly enlarge on hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+/* Checkbox styling */
+.task-item input[type="checkbox"] {
+  flex: 1; /* 20% of the width */
+  height: 100%; /* Match the height of the parent li */
+  margin-right: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-item input[type="checkbox"]::before {
+  content: ""; /* Create a custom icon */
+  display: block;
+  width: 80%; /* Icon size relative to the checkbox */
+  height: 80%; /* Icon size relative to the checkbox */
+  background-color: transparent; /* Default background */
+  border-radius: 2px; /* Optional: Rounded corners */
+}
+
+/* Task text styling */
+.task-item span {
+  flex: 6; /* 60% of the width */
+  word-break: break-word;
+  padding: 0 5px; /* Add padding for spacing */
+  text-align: left;
+  font-size: 1em; /* Dynamic font size based on parent */
+  line-height: 1.2; /* Adjust line height for better alignment */
+}
+
+/* Delete button styling */
+.task-item button {
+  flex: 1; /* 20% of the width */
+  height: 100%; /* Match the height of the parent li */
+  background-color: transparent;
+  color: #e74c3c;
+  border: none;
+  font-size: 1em; /* Dynamic font size based on parent */
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-item button:hover {
+  color: #c0392b;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+  .task-item {
+    flex-direction: row; /* Ensure items remain in one line */
+    flex-wrap: nowrap; /* Prevent wrapping */
+  }
+
+  .task-item input[type="checkbox"],
+  .task-item span,
+  .task-item button {
+    flex: none; /* Remove flex sizing */
+    width: auto; /* Allow elements to size dynamically */
+    margin: 0 5px; /* Add spacing between elements */
+  }
+}
+
+/* Completed tasks */
+li.completed span {
+  text-decoration: line-through; /* Apply strikethrough only to the task text */
+  color: gray; /* Optional: Change the text color for completed tasks */
+}
+
+li.completed input[type="checkbox"],
+li.completed button {
+  text-decoration: none; /* Ensure no strikethrough is applied to the checkbox or button */
+}
+
+li.completed {
+  background-color: #d4edda; /* Light green background for completed tasks */
+  border: 2px solid #28a745; /* Green border for completed tasks */
+}
+
+li.pending {
+  background-color: #f9f9f9; /* Light gray background for pending tasks */
+  border: 2px solid #3498db; /* Blue border for pending tasks */
+}

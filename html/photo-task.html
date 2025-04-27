@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photo Task Detection</title>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/photo-task.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Photo Task Detection</h1>
+      <p>Upload or take a photo to detect tasks.</p>
+    </header>
+
+    <main>
+      <form id="image-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="image-file">Upload Image</label>
+          <input type="file" id="image-file" name="file" accept="image/*" />
+        </div>
+
+        <div class="form-group">
+          <label for="take-photo">Take Photo</label>
+          <input
+            type="file"
+            id="take-photo"
+            name="photo"
+            accept="image/*"
+            capture="camera"
+          />
+        </div>
+
+        <button type="submit">Upload Image or Take Photo</button>
+      </form>
+
+      <div id="spinner"></div>
+      <p>Time Elapsed: <span id="elapsed-time">0</span> seconds</p>
+      <p id="message"></p>
+      <p id="original-size"></p>
+      <p id="compressed-size"></p>
+
+      <div>
+        <img
+          id="preview"
+          alt="Image Preview"
+          style="max-width: 100%; display: none"
+        />
+      </div>
+
+      <h2>Detection Results:</h2>
+      <pre id="results"></pre>
+
+      <div>
+        <a href="/index.html">Back to Home</a>
+      </div>
+    </main>
+
+    <script type="module" src="../js/photo-task.js"></script>
+  </body>
+</html>

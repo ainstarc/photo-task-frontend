@@ -3,58 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Take Photo or Upload Image</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <title>Home - Photo Task Manager</title>
+    <link rel="stylesheet" href="css/global.css" />
   </head>
   <body>
-    <h1>Upload or Take a Photo to Detect Objects</h1>
+    <header>
+      <h1>Welcome to Photo Task Manager</h1>
+      <p>Manage your tasks or detect tasks using photos.</p>
+    </header>
 
-    <!-- Image upload form -->
-    <form id="image-form" enctype="multipart/form-data">
-      <!-- Option to upload an image -->
-      <label for="image-file">Upload Image</label>
-      <input type="file" id="image-file" name="file" accept="image/*" />
+    <main>
+      <nav>
+        <ul>
+          <li><a href="html/task.html">Go to Task Manager</a></li>
+          <li><a href="html/photo-task.html">Detect Tasks with Photo</a></li>
+          <li><a href="html/about.html">About</a></li>
+        </ul>
+      </nav>
+    </main>
 
-      <br /><br />
+    <footer>
+      <p>&copy; 2025 Photo Task Manager</p>
+    </footer>
 
-      <!-- Option to take a photo using the camera -->
-      <label for="take-photo">Take Photo</label>
-      <input
-        type="file"
-        id="take-photo"
-        name="photo"
-        accept="image/*"
-        capture="camera"
-      />
-
-      <br /><br />
-
-      <button type="submit">Upload Image or Take Photo</button>
-    </form>
-
-    <!-- Loading spinner -->
-    <div id="spinner"></div>
-
-    <p>Time Elapsed: <span id="elapsed-time">0</span> seconds</p>
-    <p id="message"></p>
-
-    <!-- Display original and compressed size -->
-    <p id="original-size"></p>
-    <p id="compressed-size"></p>
-
-    <!-- Display image preview -->
-    <div>
-      <img
-        id="preview"
-        alt="Image Preview"
-        style="max-width: 100%; display: none"
-      />
-    </div>
-
-    <!-- Display results -->
-    <h2>Detection Results:</h2>
-    <pre id="results"></pre>
-
-    <script src="js/script.js"></script>
+    <script src="js/global.js"></script>
+    <script src="js/photo-task.js"></script>
+    <script src="js/task.js"></script>
   </body>
 </html>
